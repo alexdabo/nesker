@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+    dev:
+        container_name: nesker_dev
+        image: nesker-dev:1.0.0
+        build:
+            context: .
+            target: development
+            dockerfile: ./Dockerfile
+        command: npm run start:debug
+        ports:
+            - 3000:3000
+            - 9229:9229
+        networks:
+            - nesker-network
+        volumes:
+            - .:/api
+            - /api/node_modules
+        restart: unless-stopped
+    prod:
+        container_name: nesker_prod
+        image: nesker-prod:1.0.0
+        environment:
+            APP_NAME: "NesKerProd"
+            APP_VERSION: "0.0.1"
+            APP_DESCRIPTION: "Nesker es un ejemplo de nestjs y doker en modo producción"
+        build:
+            context: .
+            target: production
+            dockerfile: ./Dockerfile
+        command: npm run start:prod
+        ports:
+            - 3000:3000
+        networks:
+            - nesker-network
+        volumes:
+            - .:/api
+            - /api/node_modules
+        restart: unless-stopped
+
+networks:
+    nesker-network:
