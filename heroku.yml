@@ -7,7 +7,10 @@
 build:
   docker:
     web: Dockerfile
+    
+run:
+  web: npm run start:prod
+
 release:
-  image: nesker
-  command:
-    - node dist/main
+  image: web
+  
