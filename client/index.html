@@ -69,12 +69,20 @@
             </svg>
         }
 
+        function RefreshIcon(props) {
+            return <svg {...props} width={props.size || 20} height={props.size || 20} viewBox="0 0 24 24" stroke-width={props.stroke || 2} stroke="currentColor" fill="none">
+                
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M19.95 11a8 8 0 1 0 -.5 4m.5 5v-5h-5" />
+
+            </svg>
+        }
 
         /**********************************************************
        *                          Layout                        *
        * ********************************************************/
         function Layout(props) {
-            const [app, setApp] = useState({ name: '', version: '', description: '' })
+            const [app, setApp] = useState({ name: '', dbms: '', version: '', description: '' })
 
 
             useEffect(() => {
@@ -83,19 +91,21 @@
                     .then(data => {
                         setApp(data)
                     });
-            });
+            }, []);
 
             return <div className="flex w-screen h-screen">
                 <div className="flex flex-col overflow-hidden w-full bg-gray-100">
                     <div className="py-3 px-6 border-b border-primary-300 bg-primary-500 text-white">
-                        <span className="font-semibold">{app.name}</span>
+                        <span className="font-semibold">{app.name.toUpperCase()}</span>
                     </div>
                     <div className="p-6 h-full">
                         <div className="flex  justify-center">
                             {props.children}</div>
                     </div>
-                    <div className="py-3 px-6 border-t border-gray-300 text-gray-600">
-                        <strong>{app.name && app.version && `${app.name}@${app.version}`}</strong>  {app.description}
+                    <div className="flex justify-between py-3 px-6 border-t border-gray-300 text-gray-600">
+                        <strong>{app.name && app.version && `${app.name}@${app.version}`}</strong>
+                        <span>{app.description}</span>
+                        <span>{app.dbms}</span>
                     </div>
                 </div>
             </div>
@@ -116,7 +126,7 @@
         *                           Button                  *
         * ********************************************************/
         function Button(props) {
-            return <button {...props} className="hover:bg-primary-400 group flex items-center justify-center rounded-md bg-primary-500 text-white text-sm font-medium pl-2 pr-3 py-2 shadow-sm" >
+            return <button {...props} className="hover:bg-primary-400 group flex items-center justify-center rounded-md bg-primary-500 text-white text-sm font-medium pl-2 pr-3 py-2 shadow-sm space-x-1" >
                 <span>{props.icon}</span>
                 <span>{props.children}</span>
             </button>
@@ -128,6 +138,14 @@
             const [search, setSearch] = useState('')
             const [task, setTask] = useState({ name: '' })
             const [tasks, setTasks] = useState([])
+
+            const loadData = () => {
+                fetch('/task').then(res => res.json())
+                    .catch(error => console.error('Error:', error))
+                    .then(({ result }) => {
+                        setTasks(result)
+                    });
+            }
 
             const handleSubmit = (e) => {
                 e.preventDefault();
@@ -172,11 +190,7 @@
 
 
             useEffect(() => {
-                fetch('/task').then(res => res.json())
-                    .catch(error => console.error('Error:', error))
-                    .then(({ result }) => {
-                        setTasks(result)
-                    });
+                loadData()
             }, []);
 
             return (
@@ -187,7 +201,10 @@
                         <header className="bg-white rounded-md space-y-4 p-4 sm:px-8 sm:py-6 lg:p-4 xl:px-8 xl:py-6">
                             <div className="flex items-center justify-between">
                                 <TextField icon={<SearchIcon className="absolute left-3 top-1/2 -mt-2.5 text-slate-400 pointer-events-none group-focus-within:text-primary-500" />} onChange={({ target }) => setSearch(target.value)} />
-                                <Button icon={<AddIcon />} onClick={() => setOpen(true)}>New</Button>
+                                <div className="flex space-x-2">
+                                    <Button icon={<RefreshIcon />} onClick={() => loadData()}>Refresh</Button>
+                                    <Button icon={<AddIcon />} onClick={() => setOpen(true)}>New</Button>
+                                </div>
                             </div>
                         </header>
 

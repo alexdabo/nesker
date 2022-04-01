@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
+const pkg = require('../../../package.json');
 
 @Injectable()
 export class AppService {
   getInfo(): Object {
     return {
-      name: process.env.APP_NAME,
-      version: process.env.APP_VERSION,
-      description: process.env.APP_DESCRIPTION,
+      name: pkg.name,
+      author: pkg.author,
+      version: pkg.version,
+      description: pkg.description,
+      dbms: process.env.DATABASE_TYPE,
     };
   }
 }

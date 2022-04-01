@@ -8,9 +8,11 @@ import { Connection } from 'typeorm';
       useFactory: () => {
         const encrypt: boolean = process.env.DATABASE_ENCRYPT === 'true';
         const allowSSH: boolean = process.env.DATABASE_ALLOW_SSH === 'true';
+        const dbType: any = process.env.DATABASE_TYPE as 'postgres' | 'mssql';
+
         return {
+          type: dbType,
           logging: false,
-          type: 'postgres',
           synchronize: true,
           options: { encrypt: encrypt }, // true - Azure | false - local
           url: process.env.DATABASE_URL,
@@ -27,6 +29,9 @@ import { Connection } from 'typeorm';
 })
 export class DatabaseModule {
   constructor(private connection: Connection) {
-    if (connection.isConnected) console.log('DB Connected Successfully!');
+    if (connection.isConnected)
+      console.log(
+        `${String(process.env.DATABASE_TYPE).toUpperCase()} DB Connected!`,
+      );
   }
 }

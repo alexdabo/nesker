@@ -16,7 +16,7 @@ export class TaskService {
   }
 
   async findAll() {
-    const [result,count] =await this.repo
+    const [result, count] = await this.repo
       .createQueryBuilder('task')
 
       .orderBy('task.name', 'ASC')
@@ -24,7 +24,7 @@ export class TaskService {
       .catch(({ message }) => {
         throw new InternalServerErrorException(message);
       });
-      return {result,count}
+    return { result, count };
   }
 
   async updateOne(id: number, data: UpdateTaskDto) {
