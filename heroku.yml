@@ -9,6 +9,5 @@ build:
     web: Dockerfile
 release:
   image: nesker
-  target: production
   command:
     - node dist/main

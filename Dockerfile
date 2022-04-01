@@ -1,4 +1,4 @@
-FROM node:14-alpine as production
+FROM node:14-alpine
 
 # Create app directory, this is in our container/in our image
 WORKDIR /api
