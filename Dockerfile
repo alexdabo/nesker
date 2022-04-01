@@ -1,30 +1,22 @@
-FROM node:16-alpine AS development
+FROM node:14-alpine as production
 
+# Create app directory, this is in our container/in our image
 WORKDIR /api
 
+# Install app dependencies
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# where available (npm@5+)
 COPY package*.json ./
 
-RUN npm install glob rimraf
+RUN npm install
+# If you are building your code for production
+# RUN npm ci --only=production
 
-RUN npm install --only=development
-
+# Bundle app source
 COPY . .
 
 RUN npm run build
 
-FROM node:16-alpine as production
+EXPOSE 3000
 
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
-
-WORKDIR /api
-
-COPY package*.json ./
-
-RUN npm install --only=production
-
-COPY . .
-
-COPY --from=development /api/dist ./dist
-
-CMD ["node", "dist/main"]
+CMD [ "node", "dist/main" ]

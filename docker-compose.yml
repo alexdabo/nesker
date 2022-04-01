@@ -1,43 +1,33 @@
 version: '3.8'
 
 services:
-    dev:
-        container_name: nesker_dev
-        image: nesker-dev:1.0.0
-        build:
-            context: .
-            target: development
-            dockerfile: ./Dockerfile
-        command: npm run start:debug
-        ports:
-            - 3000:3000
-            - 9229:9229
-        networks:
-            - nesker-network
-        volumes:
-            - .:/api
-            - /api/node_modules
-        restart: unless-stopped
     prod:
-        container_name: nesker_prod
-        image: nesker-prod:1.0.0
-        environment:
-            APP_NAME: "NesKerProd"
-            APP_VERSION: "0.0.1"
-            APP_DESCRIPTION: "Nesker es un ejemplo de nestjs y doker en modo producción"
+        container_name: nesker
+        image: nesker:1.0.0
         build:
             context: .
             target: production
             dockerfile: ./Dockerfile
+        environment:
+            
+            #DATABASE_TYPE: mssql
+            #DATABASE_ENCRYPT: false
+            #DATABASE_URL: mssql:/SA:mssqlP4$$@192.168.8.130/sysmed
+            DATABASE_TYPE: postgres
+            DATABASE_ALLOW_SSH: true
+            #DATABASE_URL: postgres://postgres:postgres@192.168.8.130/nesker
+            DATABASE_URL: postgres://pvufirgquxobic:35a51cdf3894e6f42f4c7018be0bd03405e3af13e551f6dfbc8966c7d970389e@ec2-3-218-171-44.compute-1.amazonaws.com:5432/d2hfiol95a477j
+
         command: npm run start:prod
         ports:
             - 3000:3000
-        networks:
-            - nesker-network
+        network_mode: "host"
+        #networks:
+        #    - nesker-network
         volumes:
             - .:/api
             - /api/node_modules
         restart: unless-stopped
 
-networks:
-    nesker-network:
+#networks:
+#    nesker-network:

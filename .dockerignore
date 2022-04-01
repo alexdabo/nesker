@@ -8,3 +8,6 @@ npm-debug.log
 # docker files
 Dockerfile
 .dockerignore
+
+# git 
+.git
