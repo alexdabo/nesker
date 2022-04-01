@@ -6,9 +6,9 @@
   #  S3_BUCKET: nesker-bucket
 build:
   docker:
-    target: production
     web: Dockerfile
 release:
   image: nesker
+  target: production
   command:
     - node dist/main
