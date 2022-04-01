@@ -6,8 +6,6 @@
   #  S3_BUCKET: nesker-bucket
 build:
   docker:
-    
-    context: .
     target: production
     web: Dockerfile
 release:
