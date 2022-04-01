@@ -2,8 +2,8 @@ setup:
   addons:
     - plan: heroku-postgresql
       as: DATABASE
-  config:
-    S3_BUCKET: nesker-bucket
+  #config:
+  #  S3_BUCKET: nesker-bucket
 build:
   docker:
     web: Dockerfile
