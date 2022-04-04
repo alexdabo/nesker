@@ -9,7 +9,7 @@ export class AppService {
       author: pkg.author,
       version: pkg.version,
       description: pkg.description,
-      envornment: { database: process.env.DATABASE_TYPE },
+      dbms: process.env.DATABASE_TYPE,
     };
   }
 }
